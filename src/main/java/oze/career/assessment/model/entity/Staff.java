@@ -21,16 +21,15 @@ import java.util.UUID;
 public class Staff extends BaseEntity {
     private String firstName;
     private String lastName;
+    private String middleName;
     @Id
     @GenericGenerator(name = "string_based_custom_sequence", strategy = "oze.career.assessment.config.CustomUserIdGenerator")
     @GeneratedValue(generator = "string_based_custom_sequence")
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
     @Type(type = "uuid-char")
     private UUID uuid;
-    private String userCategory;
-    public String getFullName(){
-        return this.firstName+" "+this.lastName;
-
-    }
+    @Transient
+    private String name;
+    private String photoImage;
 
 }

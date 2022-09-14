@@ -22,17 +22,16 @@ import java.util.UUID;
 public class Patient extends BaseEntity {
     private String firstName;
     private String lastName;
-    private Integer age;
+    private String middleName;
     private LocalDate dob;
     private LocalDateTime last_visit_date;
     private String code;
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne
     private Staff createdBy;
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
-
-    }
+    @Transient
+    private String name;
+    @Transient
+    private Integer age;
 
 }
