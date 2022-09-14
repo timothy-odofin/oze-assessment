@@ -14,10 +14,10 @@ public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    private Long id;
+    protected Long id;
     @CreationTimestamp
-    private LocalDateTime dateCreated;
+    protected LocalDateTime dateCreated;
 
     @UpdateTimestamp
-    private LocalDateTime lastModified;
+    protected LocalDateTime lastModified;
 }

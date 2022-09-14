@@ -3,11 +3,10 @@ package oze.career.assessment.model.entity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import oze.career.assessment.model.entity.listener.StaffEvent;
+import oze.career.assessment.model.entity.listener.StaffAuditTrailListener;
 
 import javax.persistence.*;
 import java.util.UUID;
-
 /**
  *
  * @author JIDEX
@@ -19,7 +18,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(StaffEvent.class)
+@EntityListeners(StaffAuditTrailListener.class)
 public class Staff extends BaseEntity {
     private String firstName;
     private String lastName;
