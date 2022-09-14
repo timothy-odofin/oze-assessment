@@ -2,6 +2,7 @@ package oze.career.assessment.util;
 
 public class MessageUtil {
     public  final static String STAFF_UPDATED = "Great, staff %s successfully.";
+    public  final static String DELETE_SUCCESSFUL = "Great,record deleted successfully";
     public  final static String RECORD_NOT_FOUND = "Record with specified constraints not found";
     public final static String INTERNAL_SERVER_ERROR = "Unable to complete request at the moment.Please try again";
     public final static String SUCCESS = "success";

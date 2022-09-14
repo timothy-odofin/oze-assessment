@@ -31,5 +31,6 @@ staff.setUuid(UUID.randomUUID());
        staff.setName(staff.getFirstName().concat(" ")
                .concat(AppUtil.evaluate(staff.getMiddleName()))
                .concat(" ").concat(staff.getLastName()));
+       staff.setRegistrationDate(staff.getDateCreated());
     }
 }

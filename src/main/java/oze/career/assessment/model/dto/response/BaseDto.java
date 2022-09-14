@@ -15,6 +15,5 @@ public class BaseDto {
     private LocalDateTime registrationDate;
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime lastModified;
-    private String recordNumber;
 
 }

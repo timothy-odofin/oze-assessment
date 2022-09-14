@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 import oze.career.assessment.model.entity.listener.StaffAuditTrailListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 /**
  *
@@ -28,8 +29,10 @@ public class Staff extends BaseEntity {
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
     @Type(type = "uuid-char")
     private UUID uuid;
+    private String photoImage;
     @Transient
     private String name;
-    private String photoImage;
+    @Transient
+    private LocalDateTime registrationDate;
 
 }
