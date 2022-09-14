@@ -6,13 +6,15 @@ import oze.career.assessment.model.entity.Staff;
 import oze.career.assessment.util.AppUtil;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Component
 @Slf4j
 public class StaffAuditTrailListener {
     @PrePersist
     private void beforeCreate(Staff staff) {
-log.info("[USER AUDIT] About to add a user {}", staff);
+staff.setUuid(UUID.randomUUID());
+        log.info("[USER AUDIT] About to add a user {}", staff);
     }
     @PostPersist
     private void afterCreate(Staff staff) {

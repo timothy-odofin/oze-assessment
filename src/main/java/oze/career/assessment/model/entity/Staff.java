@@ -12,7 +12,7 @@ import java.util.UUID;
  * @author JIDEX
  */
 @Entity
-@Table(name = "staff_profile")
+@Table(name = "staff")
 @Data
 @ToString
 @Builder
@@ -23,9 +23,8 @@ public class Staff extends BaseEntity {
     private String firstName;
     private String lastName;
     private String middleName;
-    @Id
-    @GenericGenerator(name = "string_based_custom_sequence", strategy = "oze.career.assessment.config.CustomUserIdGenerator")
-    @GeneratedValue(generator = "string_based_custom_sequence")
+
+
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
     @Type(type = "uuid-char")
     private UUID uuid;

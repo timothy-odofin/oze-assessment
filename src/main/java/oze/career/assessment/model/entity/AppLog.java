@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @author JIDEX
  */
 @Entity
-@Table(name = "patient")
+@Table(name = "app_log")
 @Data
 @ToString
 @Builder

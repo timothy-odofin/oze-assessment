@@ -7,6 +7,8 @@ public class ParamName {
     public final static String SIZE_DEFAULT="50";
     public final static String SORTING_COL="dateCreated";
     public final static String UUID="uuid";
+    public final static String UPDATED="updated";
+    public final static String CREATE="created";
     public final static String USER_TOKEN="userToken";
 
 }
