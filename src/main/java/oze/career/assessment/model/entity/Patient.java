@@ -3,6 +3,7 @@ package oze.career.assessment.model.entity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import oze.career.assessment.model.entity.listener.PatientEvent;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(PatientEvent.class)
 public class Patient extends BaseEntity {
     private String firstName;
     private String lastName;
