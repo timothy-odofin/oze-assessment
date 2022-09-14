@@ -9,9 +9,9 @@ import java.util.UUID;
 @Data
 public class BaseDto {
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    private LocalDateTime dateCreated;
+    private LocalDateTime registrationDate;
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime lastModified;
-    private String uuid;
+    private String recordNumber;
 
 }
