@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class PatientRequest {
     private String firstName;
     private String lastName;
+    private String middleName;
     private LocalDate dob;
     private LocalDateTime last_visit_date;
 }
