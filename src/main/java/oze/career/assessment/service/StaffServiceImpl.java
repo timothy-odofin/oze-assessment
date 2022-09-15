@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import oze.career.assessment.exception.RecordNotFoundException;
 import oze.career.assessment.mapper.Mapper;
@@ -33,7 +34,7 @@ private final StaffRepository staffRepository;
         staffRepository.save(Mapper.convertObject(payload, Staff.class));
         log.info("Data {}", payload);
         return ApiResponse.<String>builder()
-                .code(CREATED)
+                .code(HttpStatus.CREATED)
                 .data(String.format(STAFF_UPDATED,CREATE))
                 .message(SUCCESS)
                 .build();
@@ -43,7 +44,7 @@ private final StaffRepository staffRepository;
     public Staff findStaff(UUID uuid) {
     Optional<Staff> staffOptional = staffRepository.findByUuid(uuid);
     if(staffOptional.isEmpty())
-        throw new RecordNotFoundException(RECORD_NOT_FOUND);
+        throw new RecordNotFoundException(INVALID_STAFF_UUID);
     return staffOptional.get();
     }
 
@@ -53,7 +54,7 @@ private final StaffRepository staffRepository;
 
         return ApiResponse.<String>builder()
                 .message(SUCCESS)
-                .code(OKAY)
+                .code(HttpStatus.OK)
                 .data(DELETE_SUCCESSFUL)
                 .build();
     }
@@ -66,7 +67,7 @@ private final StaffRepository staffRepository;
         staffRepository.save(staff);
         return ApiResponse.<String>builder()
                 .data(String.format(STAFF_UPDATED,UPDATED))
-                .code(OKAY)
+                .code(HttpStatus.OK)
                 .message(SUCCESS)
                 .build();
     }
@@ -74,7 +75,7 @@ private final StaffRepository staffRepository;
     @Override
     public ApiResponse<StaffResponse> retrieveStaff(UUID uuid) {
         return ApiResponse.<StaffResponse>builder()
-                .code(OKAY)
+                .code(HttpStatus.OK)
                 .data(Mapper.convertObject(findStaff(uuid),StaffResponse.class))
                 .message(SUCCESS)
                 .build();
@@ -88,7 +89,7 @@ private final StaffRepository staffRepository;
         return ApiResponse.<List<StaffResponse>>builder()
                 .message(SUCCESS)
                 .data(Mapper.convertList(staffList,StaffResponse.class))
-                .code(OKAY)
+                .code(HttpStatus.OK)
                 .build();
     }
 }

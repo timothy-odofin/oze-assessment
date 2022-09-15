@@ -3,7 +3,9 @@ package oze.career.assessment.util;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 public class AppUtil {
     public static String TYPE = "text/csv";
@@ -26,5 +28,8 @@ public class AppUtil {
     public static Integer getAge(LocalDate birthday){
         Period p = Period.between(birthday, LocalDate.now());
         return p.getYears();
+    }
+    public static String convertDate(LocalDateTime localDate){
+        return localDate.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 }

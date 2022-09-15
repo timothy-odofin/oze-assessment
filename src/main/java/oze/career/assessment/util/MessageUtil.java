@@ -12,6 +12,7 @@ public class MessageUtil {
     public final static String INVALID_LASTNAME = "Invalid lastname, value is required";
     public final static String INVALID_AGE_VALUE_IS_REQUIRED = "Invalid age, value is required";
     public final static String INVALIDATE_LAST_VISIT = "Invalid last visit date, value is required";
+    public final static String INVALID_STAFF_UUID = "Staff with specified credential not found";
 
     public final static String  UNAUTHORIZE = "You are not authorize to add/update item/category";
     public final static String  NO_TRANSACTION = "Transaction record not found for the selected %s";

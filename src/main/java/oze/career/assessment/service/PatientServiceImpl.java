@@ -14,6 +14,8 @@ import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.PatientResponse;
 import oze.career.assessment.model.dto.response.PatientUploadResult;
 import oze.career.assessment.model.entity.Patient;
+import oze.career.assessment.repository.PatientRepository;
+import oze.career.assessment.util.AppUtil;
 import oze.career.assessment.util.PatientCsvHeader;
 
 import java.io.*;
@@ -25,8 +27,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PatientServiceImpl implements PatientService{
+    private final PatientRepository patientRepository;
+    private final StaffService staffService;
     @Override
     public ApiResponse<String> addPatient(PatientRequest payload) {
+
         return null;
     }
 
@@ -75,21 +80,17 @@ public class PatientServiceImpl implements PatientService{
 
     private ByteArrayInputStream patientToCSV(List<Patient> patients) {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
-
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
-//            for (Tutorial tutorial : tutorials) {
-//                List<String> data = Arrays.asList(
-//                        String.valueOf(tutorial.getId()),
-//                        tutorial.getTitle(),
-//                        tutorial.getDescription(),
-//                        String.valueOf(tutorial.isPublished())
-//                );
-//
-//                csvPrinter.printRecord(data);
-//            }
-
+            for(Patient result: patients){
+                csvPrinter.printRecord(Arrays.asList(
+                        result.getName(),
+                        String.valueOf(result.getAge()),
+                        result.getLastVisitDate().toString(),
+                        AppUtil.convertDate(result.getDateCreated())));
+            }
             csvPrinter.flush();
+
             return new ByteArrayInputStream(out.toByteArray());
         } catch (IOException e) {
             throw new BadRequestException("fail to import data to CSV file: " + e.getMessage());

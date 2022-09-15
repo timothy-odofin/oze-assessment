@@ -28,4 +28,6 @@ public class PatientRequest {
     private Integer age;
     @NotNull(message=INVALIDATE_LAST_VISIT)
     private LocalDate last_visit_date;
+    @NotBlank(message = INVALID_FIRSTNAME)
+    private String staffUUID;
 }
