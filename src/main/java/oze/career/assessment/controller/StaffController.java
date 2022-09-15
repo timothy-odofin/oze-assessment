@@ -36,7 +36,7 @@ public class StaffController {
     public ApiResponse<StaffResponse> retrieveStaff(@PathVariable(UUID) UUID uuid) {
         return staffService.retrieveStaff(uuid);
     }
-    @GetMapping(RETRIEVE_OR_UPDATE)
+    @PatchMapping(RETRIEVE_OR_UPDATE)
     ApiResponse<String> updateStaff(@Valid @RequestBody StaffRequest payload, @PathVariable(UUID)UUID uuid){
         return staffService.updateStaff(payload, uuid);
 

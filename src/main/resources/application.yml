@@ -4,6 +4,10 @@ logging:
       org:
         springframework: DEBUG
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   application:
     name: medical_record
   jmx:
@@ -25,3 +29,4 @@ server:
   port: 7000
   servlet:
     contextPath: /medical/record
+
