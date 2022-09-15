@@ -22,14 +22,9 @@
 		<mapper.version>3.1.0</mapper.version>
 		<test.version>1.17.3</test.version>
 		<csv.version>1.8</csv.version>
-		<common.version>3.12.0</common.version>
+
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${common.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-csv</artifactId>

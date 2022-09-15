@@ -16,6 +16,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class AppUtil {
     public static String TYPE = "text/csv";
@@ -75,9 +76,13 @@ public class AppUtil {
         return value !=null && !value.isBlank();
     }
     public static Optional<Integer> isValidNumber(String value){
-        if( isValidString(value) && StringUtils.isNumeric(value))
+        if( isValidString(value) && isNumeric(value))
             return Optional.of(Integer.parseInt(value));
         return Optional.empty();
+    }
+    private static boolean isNumeric(String string) {
+        String regex = "[0-9]+[\\.]?[0-9]*";
+        return Pattern.matches(regex, string);
     }
     public static Optional<LocalDate> validateLocalDate(String dateString) {
         if(!isValidString(dateString))
