@@ -4,6 +4,7 @@ package oze.career.assessment.model.dto.response;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApiResponse<T> {
     private String message;
-    private String code;
+    private HttpStatus code;
     private T data;
 
     public ApiResponse(String message, T data) {
@@ -23,7 +24,7 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
-    public ApiResponse(String message, String code, T data) {
+    public ApiResponse(String message, HttpStatus code, T data) {
         this.message = message;
         this.data = data;
         this.code= code;

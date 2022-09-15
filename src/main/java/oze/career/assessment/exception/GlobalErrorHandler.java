@@ -11,21 +11,30 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import oze.career.assessment.model.dto.response.ApiResponse;
+
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static oze.career.assessment.util.AppCode.*;
-import static oze.career.assessment.util.MessageUtil.FAILED;
-import static oze.career.assessment.util.MessageUtil.INTERNAL_SERVER_ERROR;
+import static oze.career.assessment.util.MessageUtil.*;
+import static org.springframework.http.HttpStatus.*;
+import static oze.career.assessment.util.MessageUtil.SERVER_ERROR;
 
 
 @ControllerAdvice
 @Slf4j
 public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse> handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        return ResponseEntity.ok(new ApiResponse<>(FAILED,EXPECTATION_FAILED,FILE_TOO_LARGE));
+    }
     @Override
     protected ResponseEntity handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -42,14 +51,11 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST, errors));
     }
 
-
-
-
     @ExceptionHandler(UnknownHostException.class)
     public ResponseEntity handleUnknownHostException(UnknownHostException exception, WebRequest webRequest) {
         String requestUrl = webRequest.getContextPath();
         log.warn("Unknown host for {} access through endpoint {}", exception.getMessage(),requestUrl);
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND, INTERNAL_SERVER_ERROR));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND, SERVER_ERROR));
     }
 
 
@@ -80,14 +86,14 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         String error =
                 ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST+"", error)
+        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST, error)
         );
     }
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity handlerGlobalError(Exception exception) {
         exception.printStackTrace();
         log.warn("An error occur  {}", exception.fillInStackTrace().getMessage());
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, ERROR_CODE, INTERNAL_SERVER_ERROR));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR, SERVER_ERROR));
     }
 
 
