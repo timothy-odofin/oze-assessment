@@ -3,11 +3,14 @@ package oze.career.assessment.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.*;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,15 +60,17 @@ public class PatientServiceImpl implements PatientService {
     public ApiResponse<Object> uploadPatient(MultipartFile file) {
         return null;
     }
-
+private Page<Patient> listPatient(Integer minAge, UUID staffId, int page, int size){
+    staffService.findStaff(staffId);
+    return patientRepository.listByMinAge(minAge,
+            PageRequest.of(page, size, Sort.by(AGE)));
+    }
     @Override
     public ApiResponse<PatientResponseData> fetchPatients(Integer minAge,
                                                           UUID staffId,
                                                           Integer page,
                                                           Integer size) {
-        staffService.findStaff(staffId);
-        Page<Patient> patientPage = patientRepository.listByMinAge(minAge,
-                PageRequest.of(page, size, Sort.by(AGE)));
+        Page<Patient> patientPage = listPatient(minAge,staffId,page,size);
         PatientResponseData data = PatientResponseData.builder()
                 .patients(Mapper.convertList(patientPage.getContent(), PatientResponse.class))
                 .currentPage(patientPage.getNumber())
@@ -83,7 +88,12 @@ public class PatientServiceImpl implements PatientService {
                                                     UUID staffId,
                                                     Integer page,
                                                     Integer size) {
-        return null;
+        Page<Patient> patientPage = listPatient(minAge,staffId,page,size);
+        InputStreamResource file = new InputStreamResource(patientToCSV(patientPage.getContent()));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=patient.csv")
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
     }
 
     @Override
