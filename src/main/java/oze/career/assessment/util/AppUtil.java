@@ -30,6 +30,6 @@ public class AppUtil {
         return p.getYears();
     }
     public static String convertDate(LocalDateTime localDate){
-        return localDate.format(DateTimeFormatter.ISO_DATE_TIME);
+        return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

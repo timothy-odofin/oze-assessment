@@ -3,18 +3,25 @@ package oze.career.assessment.service;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import oze.career.assessment.model.dto.request.PatientFetchRequest;
 import oze.career.assessment.model.dto.request.PatientRequest;
 import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.PatientResponse;
+import oze.career.assessment.model.dto.response.PatientResponseData;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PatientService {
     ApiResponse<String> addPatient(PatientRequest payload);
     ApiResponse<Object> uploadPatient(MultipartFile file);
-    ApiResponse<List<PatientResponse>> fetchPatients(PatientFetchRequest payload);
-    ResponseEntity<Resource> downloadPatient(PatientFetchRequest payload);
-    ResponseEntity<Resource> downloadSinglePatient(String staffId, String patientCode);
+    ApiResponse<PatientResponseData> fetchPatients(Integer minAge,
+                                                   UUID staffId,
+                                                   Integer page,
+                                                   Integer size);
+    ResponseEntity<Resource> downloadPatient(Integer minAge,
+                                             UUID staffId,
+                                             Integer page,
+                                             Integer size);
+    ResponseEntity<Resource> downloadSinglePatient(UUID staffId, String patientCode);
 
 }

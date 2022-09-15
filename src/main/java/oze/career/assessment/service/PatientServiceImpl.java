@@ -4,29 +4,33 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.*;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import oze.career.assessment.exception.BadRequestException;
 import oze.career.assessment.mapper.Mapper;
-import oze.career.assessment.model.dto.request.PatientFetchRequest;
 import oze.career.assessment.model.dto.request.PatientRequest;
 import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.PatientResponse;
+import oze.career.assessment.model.dto.response.PatientResponseData;
 import oze.career.assessment.model.dto.response.PatientUploadResult;
 import oze.career.assessment.model.entity.Patient;
 import oze.career.assessment.model.entity.Staff;
 import oze.career.assessment.repository.PatientRepository;
 import oze.career.assessment.util.AppUtil;
-import oze.career.assessment.util.PatientCsvHeader;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static oze.career.assessment.util.MessageUtil.*;
+import static oze.career.assessment.util.ParamName.AGE;
 import static oze.career.assessment.util.ParamName.CREATE;
 
 @Service
@@ -41,6 +45,7 @@ public class PatientServiceImpl implements PatientService {
         Staff staff = staffService.findStaff(payload.getStaffId());
         Patient patient = Mapper.convertObject(payload, Patient.class);
         patient.setCreatedBy(staff);
+        patientRepository.save(patient);
         return ApiResponse.<String>builder()
                 .code(HttpStatus.CREATED)
                 .data(String.format(PATIENT_MESSAGE, CREATE))
@@ -54,17 +59,35 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public ApiResponse<List<PatientResponse>> fetchPatients(PatientFetchRequest payload) {
+    public ApiResponse<PatientResponseData> fetchPatients(Integer minAge,
+                                                          UUID staffId,
+                                                          Integer page,
+                                                          Integer size) {
+        staffService.findStaff(staffId);
+        Page<Patient> patientPage = patientRepository.listByMinAge(minAge,
+                PageRequest.of(page, size, Sort.by(AGE)));
+        PatientResponseData data = PatientResponseData.builder()
+                .patients(Mapper.convertList(patientPage.getContent(), PatientResponse.class))
+                .currentPage(patientPage.getNumber())
+                .totalItems(patientPage.getTotalElements())
+                .totalPages(patientPage.getTotalPages())
+                .build();
+        return ApiResponse.<PatientResponseData>builder()
+                .message(SUCCESS)
+                .data(data)
+                .build();
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadPatient(Integer minAge,
+                                                    UUID staffId,
+                                                    Integer page,
+                                                    Integer size) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Resource> downloadPatient(PatientFetchRequest payload) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Resource> downloadSinglePatient(String staffId, String patientCode) {
+    public ResponseEntity<Resource> downloadSinglePatient(UUID staffId, String patientCode) {
         return null;
     }
 
