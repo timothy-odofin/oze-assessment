@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static oze.career.assessment.util.MessageUtil.*;
 
@@ -27,7 +28,7 @@ public class PatientRequest {
     @Min(value=1, message = INVALID_AGE_VALUE_IS_REQUIRED)
     private Integer age;
     @NotNull(message=INVALIDATE_LAST_VISIT)
-    private LocalDate last_visit_date;
+    private LocalDate lastVisitDate;
     @NotBlank(message = INVALID_FIRSTNAME)
-    private String staffUUID;
+    private UUID staffId;
 }
