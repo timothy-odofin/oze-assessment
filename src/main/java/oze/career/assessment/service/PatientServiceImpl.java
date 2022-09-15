@@ -3,6 +3,7 @@ package oze.career.assessment.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import oze.career.assessment.exception.BadRequestException;
+import oze.career.assessment.exception.ReadingCsvException;
 import oze.career.assessment.exception.RecordNotFoundException;
 import oze.career.assessment.mapper.Mapper;
 import oze.career.assessment.model.dto.request.PatientRequest;
@@ -26,8 +28,11 @@ import oze.career.assessment.model.entity.Patient;
 import oze.career.assessment.model.entity.Staff;
 import oze.career.assessment.repository.PatientRepository;
 import oze.career.assessment.util.AppUtil;
+import oze.career.assessment.util.MessageUtil;
+import oze.career.assessment.util.PatientCsvHeader;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 
 import static oze.career.assessment.util.AppUtil.getResourceBody;
@@ -55,9 +60,22 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public ApiResponse<Object> uploadPatient(UUID staffId, MultipartFile file) {
+    public ApiResponse uploadPatient(UUID staffId, MultipartFile file) throws IOException {
         Staff staff = staffService.validateStaff(staffId);
-        return null;
+        if(!AppUtil.hasCSVFormat(file))
+            throw new BadRequestException(SERVER_ERROR_CV);
+        List<PatientUploadResult> resultList = csvToPatient(file.getInputStream(),staff);
+        if(resultList.isEmpty())
+            return ApiResponse.<String>builder()
+                    .code(HttpStatus.CREATED)
+                    .data(String.format(PATIENT_MESSAGE, CREATE))
+                    .message(SUCCESS)
+                    .build();
+        return ApiResponse.<List<PatientUploadResult>>builder()
+                .code(HttpStatus.CREATED)
+                .data(resultList)
+                .message(SUCCESS)
+                .build();
     }
 
     private Page<Patient> listPatient(Integer minAge, UUID staffId, int page, int size) {
@@ -124,26 +142,57 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientsOptional.get();
         return getResourceBody(new InputStreamResource(patientToCSV(Collections.singletonList(patient))), patient.getName());
     }
+    private Optional<PatientUploadResult> validateAndSave(CSVRecord record, Staff postedBy){
+        String age = record.get(PatientCsvHeader.AGE);
+        String firstName = record.get(PatientCsvHeader.FIRST_NAME);
+      String lastName =record.get(PatientCsvHeader.LAST_NAME);
+        String middleName = record.get(PatientCsvHeader.MIDDLE_NAME);
+        String lastVisitDate =record.get(PatientCsvHeader.LAST_VISIT_DATE);
+        List<String> errorList = new ArrayList<>();
+        Optional<Integer> ageOptional = AppUtil.isValidNumber(age);
+        Optional<LocalDate> lastVisitDateOptional = AppUtil.validateLocalDate(lastVisitDate);
+        if(ageOptional.isEmpty())
+            errorList.add("Invalid age");
+        if(AppUtil.isValidString(firstName))
+            errorList.add("Invalid first name");
+        if(AppUtil.isValidString(lastName))
+            errorList.add("Invalid last name");
+        if(lastVisitDateOptional.isEmpty())
+            errorList.add("Invalid last visit date");
+        if(errorList.isEmpty())
+            return Optional.of(PatientUploadResult.builder()
+                            .firstName(firstName)
+                            .lastName(lastName)
+                            .age(age)
+                            .errors(errorList)
+                            .lastVisitDate(lastVisitDate)
+                            .middleName(middleName)
+                    .build());
+        patientRepository.save(Patient.builder()
+                        .age(ageOptional.get())
+                        .createdBy(postedBy)
+                        .firstName(firstName)
+                        .lastName(lastName)
+                        .lastVisitDate(lastVisitDateOptional.get())
+                        .middleName(middleName)
+                .build());
+        return Optional.empty();
+    }
 
-    private List<PatientUploadResult> csvToPatient(InputStream is) {
+    private List<PatientUploadResult> csvToPatient(InputStream is, Staff postedBy) {
         List<PatientUploadResult> dataList = new ArrayList<>();
-//        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-//             CSVParser csvParser = new CSVParser(fileReader,
-//                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
-//
-//            List<Patient> tutorials = new ArrayList<Patient>();
-//
-//            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-//
-//            for (CSVRecord csvRecord : csvRecords) {
-//                Patient tutorial = Patient.builder()
-//                        .age(csvRecord.get(PatientCsvHeader.AGE))
-//                        .
-//                .build();
-//
-//                tutorials.add(tutorial);
-//            }
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+             CSVParser csvParser = new CSVParser(fileReader,
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
+            for (CSVRecord csvRecord : csvRecords) {
+                Optional<PatientUploadResult> result = validateAndSave(csvRecord, postedBy);
+                result.ifPresent(dataList::add);
+            }
+        }catch(IOException ioException){
+           ioException.printStackTrace();
+        }
         return dataList;
 
     }

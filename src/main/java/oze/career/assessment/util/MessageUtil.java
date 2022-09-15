@@ -6,6 +6,7 @@ public class MessageUtil {
     public  final static String DELETE_SUCCESSFUL = "Great,record deleted successfully";
     public  final static String RECORD_NOT_FOUND = "Record with specified constraints not found";
     public final static String SERVER_ERROR = "Unable to complete request at the moment.Please try again";
+    public final static String SERVER_ERROR_CV = "Unable to read csv file, kindly check the format";
     public final static String SUCCESS = "success";
     public final static String FILE_TOO_LARGE = "File is too large than expected size";
     public final static String PATIENT_NOT_FOUND = "Patient with specified constraint(s) not found";

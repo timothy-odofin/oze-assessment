@@ -8,12 +8,13 @@ import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.PatientResponse;
 import oze.career.assessment.model.dto.response.PatientResponseData;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 public interface PatientService {
     ApiResponse<String> addPatient(PatientRequest payload);
-    ApiResponse<Object> uploadPatient(UUID staffId, MultipartFile file);
+    ApiResponse uploadPatient(UUID staffId, MultipartFile file) throws IOException;
     ApiResponse<PatientResponseData> fetchPatients(Integer minAge,
                                                    UUID staffId,
                                                    Integer page,

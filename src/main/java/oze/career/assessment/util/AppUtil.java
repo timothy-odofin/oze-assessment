@@ -1,5 +1,6 @@
 package oze.career.assessment.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -68,6 +69,24 @@ public class AppUtil {
         } catch (ParseException e) {
             return Optional.empty();
         }
+
+    }
+    public static boolean isValidString(String value){
+        return value !=null && !value.isBlank();
+    }
+    public static Optional<Integer> isValidNumber(String value){
+        if( isValidString(value) && StringUtils.isNumeric(value))
+            return Optional.of(Integer.parseInt(value));
+        return Optional.empty();
+    }
+    public static Optional<LocalDate> validateLocalDate(String dateString) {
+        if(!isValidString(dateString))
+            return Optional.empty();
+       try{
+           return Optional.of(LocalDate.parse(dateString));
+       }catch (Exception e){
+           return Optional.empty();
+       }
 
     }
 }

@@ -16,6 +16,6 @@ public class PatientUploadResult {
     private String lastName;
     private String middleName;
     private String lastVisitDate;
-    private Integer age;
+    private String age;
     private List<String> errors;
 }

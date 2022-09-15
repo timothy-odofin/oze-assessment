@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import oze.career.assessment.model.dto.response.ApiResponse;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND, exception.getMessage()));
 
     }
+
     @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, WebRequest request) {
@@ -89,6 +91,20 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST, error)
         );
     }
+    @ExceptionHandler(value = ReadingCsvException.class)
+    public ResponseEntity handleReadingCsvException(ReadingCsvException exception) {
+        exception.printStackTrace();
+        log.warn("An error occur  {}", exception.fillInStackTrace().getMessage());
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
+
+    @ExceptionHandler(value = IOException.class)
+    public ResponseEntity handleIOException(IOException exception) {
+        exception.printStackTrace();
+        log.warn("An error occur  {}", exception.fillInStackTrace().getMessage());
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity handlerGlobalError(Exception exception) {
         exception.printStackTrace();
