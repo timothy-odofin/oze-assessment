@@ -11,6 +11,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class StaffAuditTrailListener {
+
     @PrePersist
     private void beforeCreate(Staff staff) {
 staff.setUuid(UUID.randomUUID());

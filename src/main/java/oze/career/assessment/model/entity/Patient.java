@@ -22,15 +22,13 @@ public class Patient extends BaseEntity {
     private String firstName;
     private String lastName;
     private String middleName;
-    private LocalDate dob;
-    private LocalDateTime last_visit_date;
-    private String code;
+    private LocalDate lastVisitDate;
+    private String patientCode;
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @ManyToOne
     private Staff createdBy;
     @Transient
     private String name;
-    @Transient
     private Integer age;
 
 }

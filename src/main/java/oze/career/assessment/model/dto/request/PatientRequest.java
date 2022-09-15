@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -22,8 +23,9 @@ public class PatientRequest {
     @NotBlank(message = INVALID_LASTNAME)
     private String lastName;
     private String middleName;
-    @NotNull(message=INVALIDATE_DOB)
-    private LocalDate dob;
+    @NotNull(message= INVALID_AGE_VALUE_IS_REQUIRED)
+    @Min(value=1, message = INVALID_AGE_VALUE_IS_REQUIRED)
+    private Integer age;
     @NotNull(message=INVALIDATE_LAST_VISIT)
-    private LocalDateTime last_visit_date;
+    private LocalDate last_visit_date;
 }
