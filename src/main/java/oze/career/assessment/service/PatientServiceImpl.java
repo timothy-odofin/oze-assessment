@@ -32,8 +32,7 @@ import java.util.*;
 
 import static oze.career.assessment.util.AppUtil.getResourceBody;
 import static oze.career.assessment.util.MessageUtil.*;
-import static oze.career.assessment.util.ParamName.AGE;
-import static oze.career.assessment.util.ParamName.CREATE;
+import static oze.career.assessment.util.ParamName.*;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +55,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public ApiResponse<Object> uploadPatient(MultipartFile file) {
+    public ApiResponse<Object> uploadPatient(UUID staffId, MultipartFile file) {
+        Staff staff = staffService.validateStaff(staffId);
         return null;
     }
 
@@ -97,12 +97,31 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public ApiResponse<String> deletePatient(UUID staffId, String dateFrom, String dateTo) {
+        staffService.validateStaff(staffId);
+        Optional<Date> fromDate = AppUtil.validateDate(dateFrom);
+        Optional<Date> toDate = AppUtil.validateDate(dateTo);
+        if (fromDate.isEmpty() || toDate.isEmpty())
+            throw new BadRequestException(INVALID_DATE_FILTER);
+        Date fDate = fromDate.get();
+        Date tDate = toDate.get();
+        if (patientRepository.checkPatientExistence(fDate, tDate, PageRequest.of(0, 1)).isEmpty())
+            throw new RecordNotFoundException(PATIENT_NOT_FOUND);
+        patientRepository.deletePatient(fDate, tDate);
+        return ApiResponse.<String>builder()
+                .code(HttpStatus.NO_CONTENT)
+                .data(String.format(PATIENT_MESSAGE, DELETED))
+                .message(SUCCESS)
+                .build();
+    }
+
+    @Override
     public ResponseEntity<Resource> downloadSinglePatient(UUID staffId, String patientCode) {
         staffService.validateStaff(staffId);
-Optional<Patient> patientsOptional =patientRepository.findByPatientCode(patientCode);
-if(patientsOptional.isEmpty())
-    throw new RecordNotFoundException(PATIENT_NOT_FOUND);
-Patient patient = patientsOptional.get();
+        Optional<Patient> patientsOptional = patientRepository.findByPatientCode(patientCode);
+        if (patientsOptional.isEmpty())
+            throw new RecordNotFoundException(PATIENT_NOT_FOUND);
+        Patient patient = patientsOptional.get();
         return getResourceBody(new InputStreamResource(patientToCSV(Collections.singletonList(patient))), patient.getName());
     }
 

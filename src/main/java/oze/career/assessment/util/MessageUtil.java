@@ -18,6 +18,7 @@ public class MessageUtil {
 
     public final static String  UNAUTHORIZE = "You are not authorize to add/update item/category";
     public final static String  NO_TRANSACTION = "Transaction record not found for the selected %s";
+    public final static String  INVALID_DATE_FILTER = "Date filter parameter(s) is/are incorrect";
 
 
 

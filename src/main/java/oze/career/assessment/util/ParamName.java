@@ -12,6 +12,7 @@ public class ParamName {
     public final static String PATIENT_CODE="patientCode";
     public final static String UPDATED="updated";
     public final static String CREATE="created";
+    public final static String DELETED="deleted";
     public final static String STAFF_ID="staffId";
 
 }

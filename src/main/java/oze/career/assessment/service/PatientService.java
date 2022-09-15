@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public interface PatientService {
     ApiResponse<String> addPatient(PatientRequest payload);
-    ApiResponse<Object> uploadPatient(MultipartFile file);
+    ApiResponse<Object> uploadPatient(UUID staffId, MultipartFile file);
     ApiResponse<PatientResponseData> fetchPatients(Integer minAge,
                                                    UUID staffId,
                                                    Integer page,
@@ -22,6 +22,7 @@ public interface PatientService {
                                              UUID staffId,
                                              Integer page,
                                              Integer size);
+    ApiResponse<String> deletePatient(UUID staffId, String dateFrom, String dateTo);
     ResponseEntity<Resource> downloadSinglePatient(UUID staffId, String patientCode);
 
 }
