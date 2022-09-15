@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import oze.career.assessment.model.entity.Patient;
 
+import java.util.Optional;
+
 
 public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query("select p from Patient p where p.age>=:minAge")
     Page<Patient> listByMinAge(@Param("minAge") Integer minAge, Pageable pageable);
+    Optional<Patient> findByPatientCode(String patientCode);
 }

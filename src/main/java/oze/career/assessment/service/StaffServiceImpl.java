@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static oze.career.assessment.util.AppCode.CREATED;
-import static oze.career.assessment.util.AppCode.OKAY;
 import static oze.career.assessment.util.MessageUtil.*;
 import static oze.career.assessment.util.ParamName.*;
 
@@ -41,7 +39,7 @@ private final StaffRepository staffRepository;
     }
 
     @Override
-    public Staff findStaff(UUID uuid) {
+    public Staff validateStaff(UUID uuid) {
     Optional<Staff> staffOptional = staffRepository.findByUuid(uuid);
     if(staffOptional.isEmpty())
         throw new RecordNotFoundException(INVALID_STAFF_UUID);
@@ -50,7 +48,7 @@ private final StaffRepository staffRepository;
 
     @Override
     public ApiResponse<String> deleteStaff(UUID uuid) {
-       staffRepository.delete(findStaff(uuid));
+       staffRepository.delete(validateStaff(uuid));
 
         return ApiResponse.<String>builder()
                 .message(SUCCESS)
@@ -60,7 +58,7 @@ private final StaffRepository staffRepository;
     }
     @Override
     public ApiResponse<String> updateStaff(StaffRequest payload, UUID uuid) {
-        Staff staff = findStaff(uuid);
+        Staff staff = validateStaff(uuid);
         staff.setFirstName(payload.getFirstName());
         staff.setLastName(payload.getLastName());
         staff.setMiddleName(payload.getMiddleName());
@@ -76,7 +74,7 @@ private final StaffRepository staffRepository;
     public ApiResponse<StaffResponse> retrieveStaff(UUID uuid) {
         return ApiResponse.<StaffResponse>builder()
                 .code(HttpStatus.OK)
-                .data(Mapper.convertObject(findStaff(uuid),StaffResponse.class))
+                .data(Mapper.convertObject(validateStaff(uuid),StaffResponse.class))
                 .message(SUCCESS)
                 .build();
     }

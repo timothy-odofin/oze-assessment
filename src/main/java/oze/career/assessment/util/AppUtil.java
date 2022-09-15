@@ -1,5 +1,10 @@
 package oze.career.assessment.util;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -31,5 +36,17 @@ public class AppUtil {
     }
     public static String convertDate(LocalDateTime localDate){
         return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+    public static ResponseEntity<Resource> getResourceBody(InputStreamResource file, String filename){
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+getFileName(filename)+".csv")
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
+    }
+    private static String getFileName(String originalName){
+        if(originalName !=null && originalName.contains(" "))
+            return String.join("_", originalName.split(""));
+        else
+            return originalName;
     }
 }

@@ -8,6 +8,7 @@ public class MessageUtil {
     public final static String SERVER_ERROR = "Unable to complete request at the moment.Please try again";
     public final static String SUCCESS = "success";
     public final static String FILE_TOO_LARGE = "File is too large than expected size";
+    public final static String PATIENT_NOT_FOUND = "Patient with specified constraint(s) not found";
     public final static String FAILED = "fail";
     public final static String INVALID_FIRSTNAME = "Invalid firstname, value is required";
     public final static String INVALID_LASTNAME = "Invalid lastname, value is required";

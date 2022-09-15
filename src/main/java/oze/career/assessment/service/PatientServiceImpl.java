@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import oze.career.assessment.exception.BadRequestException;
+import oze.career.assessment.exception.RecordNotFoundException;
 import oze.career.assessment.mapper.Mapper;
 import oze.career.assessment.model.dto.request.PatientRequest;
 import oze.career.assessment.model.dto.response.ApiResponse;
@@ -27,11 +28,9 @@ import oze.career.assessment.repository.PatientRepository;
 import oze.career.assessment.util.AppUtil;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import static oze.career.assessment.util.AppUtil.getResourceBody;
 import static oze.career.assessment.util.MessageUtil.*;
 import static oze.career.assessment.util.ParamName.AGE;
 import static oze.career.assessment.util.ParamName.CREATE;
@@ -45,7 +44,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public ApiResponse<String> addPatient(PatientRequest payload) {
-        Staff staff = staffService.findStaff(payload.getStaffId());
+        Staff staff = staffService.validateStaff(payload.getStaffId());
         Patient patient = Mapper.convertObject(payload, Patient.class);
         patient.setCreatedBy(staff);
         patientRepository.save(patient);
@@ -60,17 +59,22 @@ public class PatientServiceImpl implements PatientService {
     public ApiResponse<Object> uploadPatient(MultipartFile file) {
         return null;
     }
-private Page<Patient> listPatient(Integer minAge, UUID staffId, int page, int size){
-    staffService.findStaff(staffId);
-    return patientRepository.listByMinAge(minAge,
-            PageRequest.of(page, size, Sort.by(AGE)));
+
+    private Page<Patient> listPatient(Integer minAge, UUID staffId, int page, int size) {
+        staffService.validateStaff(staffId);
+        Page<Patient> pages = patientRepository.listByMinAge(minAge,
+                PageRequest.of(page, size, Sort.by(AGE)));
+        if (pages.isEmpty())
+            throw new RecordNotFoundException(PATIENT_NOT_FOUND);
+        return pages;
     }
+
     @Override
     public ApiResponse<PatientResponseData> fetchPatients(Integer minAge,
                                                           UUID staffId,
                                                           Integer page,
                                                           Integer size) {
-        Page<Patient> patientPage = listPatient(minAge,staffId,page,size);
+        Page<Patient> patientPage = listPatient(minAge, staffId, page, size);
         PatientResponseData data = PatientResponseData.builder()
                 .patients(Mapper.convertList(patientPage.getContent(), PatientResponse.class))
                 .currentPage(patientPage.getNumber())
@@ -88,17 +92,18 @@ private Page<Patient> listPatient(Integer minAge, UUID staffId, int page, int si
                                                     UUID staffId,
                                                     Integer page,
                                                     Integer size) {
-        Page<Patient> patientPage = listPatient(minAge,staffId,page,size);
-        InputStreamResource file = new InputStreamResource(patientToCSV(patientPage.getContent()));
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=patient.csv")
-                .contentType(MediaType.parseMediaType("application/csv"))
-                .body(file);
+        Page<Patient> patientPage = listPatient(minAge, staffId, page, size);
+        return getResourceBody(new InputStreamResource(patientToCSV(patientPage.getContent())), "patient");
     }
 
     @Override
     public ResponseEntity<Resource> downloadSinglePatient(UUID staffId, String patientCode) {
-        return null;
+        staffService.validateStaff(staffId);
+Optional<Patient> patientsOptional =patientRepository.findByPatientCode(patientCode);
+if(patientsOptional.isEmpty())
+    throw new RecordNotFoundException(PATIENT_NOT_FOUND);
+Patient patient = patientsOptional.get();
+        return getResourceBody(new InputStreamResource(patientToCSV(Collections.singletonList(patient))), patient.getName());
     }
 
     private List<PatientUploadResult> csvToPatient(InputStream is) {
