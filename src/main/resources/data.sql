@@ -1,4 +1,3 @@
-delete from staff;
 INSERT INTO staff VALUES (1,'2022-09-14 13:50:57','2022-09-14 14:25:30','Musa','Akanmu','Olawale',NULL,'e1608833-30c2-43fc-b0f7-5016c7344a12'),(2,'2022-09-14 13:51:41','2022-09-14 13:51:41','Barau','Tebrig','Monday',NULL,'92371a15-d064-4bde-a966-c3a1a3a9c7ee');
 insert into patient (created_by, first_name, last_name, patient_code, age, date_created, last_modified, middle_name, last_visit_date) values (1, 'Hugues', 'Kenningham', 'WAUAF98E87A375790', 10, '2022-08-17 10:04:33', '2022-01-09 15:57:17', 'Ruilton', '2021-09-18');
 insert into patient (created_by, first_name, last_name, patient_code, age, date_created, last_modified, middle_name, last_visit_date) values (2, 'Fae', 'Lindenberg', '19XFB2E56CE699439', 81, '2022-02-02 18:37:36', '2022-03-04 16:18:57', null, '2022-03-06');

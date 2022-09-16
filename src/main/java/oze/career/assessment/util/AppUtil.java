@@ -1,5 +1,7 @@
 package oze.career.assessment.util;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -69,6 +71,13 @@ public class AppUtil {
         } catch (ParseException e) {
             return Optional.empty();
         }
+
+    }
+    public static String getBase64Image(byte[] imageByteArray){
+        StringBuilder sb = new StringBuilder();
+        sb.append("data:image/png;base64,");
+        sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(imageByteArray, false)));
+        return sb.toString();
 
     }
     public static boolean isValidString(String value){

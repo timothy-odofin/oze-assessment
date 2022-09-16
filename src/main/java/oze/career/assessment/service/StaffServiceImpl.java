@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import oze.career.assessment.exception.RecordNotFoundException;
 import oze.career.assessment.mapper.Mapper;
 import oze.career.assessment.model.dto.request.StaffRequest;
@@ -13,7 +14,9 @@ import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.StaffResponse;
 import oze.career.assessment.model.entity.Staff;
 import oze.career.assessment.repository.StaffRepository;
+import oze.career.assessment.util.AppUtil;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -88,6 +91,18 @@ private final StaffRepository staffRepository;
                 .message(SUCCESS)
                 .data(Mapper.convertList(staffList,StaffResponse.class))
                 .code(HttpStatus.OK)
+                .build();
+    }
+
+    @Override
+    public ApiResponse<String> updatePhoto(java.util.UUID uuid, MultipartFile file) throws IOException {
+        Staff staff = validateStaff(uuid);
+        staff.setPhotoImage(AppUtil.getBase64Image(file.getBytes()));
+        staffRepository.save(staff);
+        return ApiResponse.<String>builder()
+                .data(String.format(STAFF_UPDATED,UPDATED))
+                .code(HttpStatus.OK)
+                .message(SUCCESS)
                 .build();
     }
 }

@@ -202,12 +202,14 @@ public class PatientServiceImpl implements PatientService {
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             //Create csv header
             csvPrinter.printRecord(Arrays.asList(
+                    PatientCsvHeader.PATIENT_CODE,
                     PatientCsvHeader.NAME,
                     PatientCsvHeader.AGE,
                     PatientCsvHeader.LAST_VISIT_DATE,
                     PatientCsvHeader.DATE_CREATED));
             for (Patient result : patients) {
                 csvPrinter.printRecord(Arrays.asList(
+                        result.getPatientCode(),
                         result.getName(),
                         String.valueOf(result.getAge()),
                         result.getLastVisitDate().toString(),

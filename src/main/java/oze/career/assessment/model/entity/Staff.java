@@ -24,11 +24,10 @@ public class Staff extends BaseEntity {
     private String firstName;
     private String lastName;
     private String middleName;
-
-
     @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
     @Type(type = "uuid-char")
     private UUID uuid;
+    @Lob
     private String photoImage;
     @Transient
     private String name;
