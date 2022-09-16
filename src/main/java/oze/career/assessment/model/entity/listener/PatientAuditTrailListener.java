@@ -3,7 +3,6 @@ package oze.career.assessment.model.entity.listener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import oze.career.assessment.model.entity.Patient;
-import oze.career.assessment.model.entity.Staff;
 import oze.career.assessment.util.AppUtil;
 import oze.career.assessment.util.CodeUtil;
 
@@ -11,7 +10,6 @@ import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
 import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
-import java.util.UUID;
 
 @Component
 @Slf4j

@@ -11,7 +11,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static oze.career.assessment.util.MessageUtil.*;
@@ -37,7 +36,7 @@ public class PatientRequest {
     @NotNull(message=INVALIDATE_LAST_VISIT)
     @ApiModelProperty(allowEmptyValue = false, value = "The last visitation date of the patient", dataType = "Date", required = true)
     private LocalDate lastVisitDate;
-    @NotBlank(message = INVALID_FIRSTNAME)
+    @NotNull(message = INVALID_FIRSTNAME)
     @ApiModelProperty(allowEmptyValue = false, value = "The unique identification number of the staff creating the patient", dataType = "String", required = true)
     private UUID staffId;
 }

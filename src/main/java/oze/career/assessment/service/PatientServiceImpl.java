@@ -3,20 +3,16 @@ package oze.career.assessment.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.*;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import oze.career.assessment.exception.BadRequestException;
-import oze.career.assessment.exception.ReadingCsvException;
 import oze.career.assessment.exception.RecordNotFoundException;
 import oze.career.assessment.mapper.Mapper;
 import oze.career.assessment.model.dto.request.PatientRequest;
@@ -28,11 +24,11 @@ import oze.career.assessment.model.entity.Patient;
 import oze.career.assessment.model.entity.Staff;
 import oze.career.assessment.repository.PatientRepository;
 import oze.career.assessment.util.AppUtil;
-import oze.career.assessment.util.MessageUtil;
 import oze.career.assessment.util.PatientCsvHeader;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.UUID;
 import java.util.*;
 
 import static oze.career.assessment.util.AppUtil.getResourceBody;
@@ -49,6 +45,8 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ApiResponse<String> addPatient(PatientRequest payload) {
         Staff staff = staffService.validateStaff(payload.getStaffId());
+        if(payload.getLastVisitDate().isAfter(LocalDate.now()))
+            throw new BadRequestException(INVALIDATE_LAST_VISIT);
         Patient patient = Mapper.convertObject(payload, Patient.class);
         patient.setCreatedBy(staff);
         patientRepository.save(patient);
