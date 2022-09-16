@@ -10,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import oze.career.assessment.model.entity.Patient;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-
-
 public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query("select p from Patient p where p.age>=:minAge")
     Page<Patient> listByMinAge(@Param("minAge") Integer minAge, Pageable pageable);

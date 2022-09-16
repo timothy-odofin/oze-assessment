@@ -1,6 +1,7 @@
 package oze.career.assessment.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import oze.career.assessment.model.dto.request.StaffRequest;
@@ -12,6 +13,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+import static oze.career.assessment.util.AppCode.*;
+import static oze.career.assessment.util.MessageUtil.SUCCESS;
 import static oze.career.assessment.util.ParamName.*;
 import static oze.career.assessment.util.StaffEndpoint.BASE;
 import static oze.career.assessment.util.StaffEndpoint.RETRIEVE_OR_UPDATE;
@@ -22,21 +25,41 @@ import static oze.career.assessment.util.StaffEndpoint.RETRIEVE_OR_UPDATE;
 public class StaffController {
     private final StaffService staffService;
     @PostMapping()
+    @ApiOperation(value="Endpoint for adding new staff into the system, only validated payload would be saved", response = String.class)
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = CODE_200, message = SUCCESS),
+            @io.swagger.annotations.ApiResponse(code = CODE_404, message = "The resource you were trying to reach is not found"),
+            @io.swagger.annotations.ApiResponse(code = CODE_500, message = "An error occur kindly contact support"),
+            @io.swagger.annotations.ApiResponse(code = CODE_417, message = "Expectation failed"),
+            @io.swagger.annotations.ApiResponse(code = CODE_400, message = "Request not supported or Method type not valid")})
     ApiResponse<String> addStaff(@Valid @RequestBody StaffRequest payload){
         return staffService.addStaff(payload);
     }
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = CODE_200, message = SUCCESS),
+            @io.swagger.annotations.ApiResponse(code = CODE_404, message = "The resource you were trying to reach is not found"),
+            @io.swagger.annotations.ApiResponse(code = CODE_500, message = "An error occur kindly contact support"),
+            @io.swagger.annotations.ApiResponse(code = CODE_400, message = "Request not supported or Method type not valid")})
     @GetMapping()
-    @ApiOperation(value="Endpoint for retrieving single staff", response = StaffResponse.class, responseContainer = "List")
+    @ApiOperation(value="Endpoint for retrieving paginated list of staff profile", response = StaffResponse.class, responseContainer = "List")
     ApiResponse<List<StaffResponse>> listStaff(@RequestParam(value=PAGE, defaultValue = PAGE_DEFAULT) int page,
                                                @RequestParam(value=SIZE,defaultValue = SIZE_DEFAULT) int size){
         return staffService.listStaff(page,size);
     }
     @GetMapping(RETRIEVE_OR_UPDATE)
-    @ApiOperation(value="Endpoint for retrieving single staff", response = StaffResponse.class)
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = CODE_200, message = SUCCESS),
+            @io.swagger.annotations.ApiResponse(code = CODE_404, message = "The resource you were trying to reach is not found"),
+            @io.swagger.annotations.ApiResponse(code = CODE_500, message = "An error occur kindly contact support"),
+            @io.swagger.annotations.ApiResponse(code = CODE_400, message = "Request not supported or Method type not valid")})
+    @ApiOperation(value="Endpoint for retrieving single staff profile", response = StaffResponse.class)
     public ApiResponse<StaffResponse> retrieveStaff(@PathVariable(UUID) UUID uuid) {
         return staffService.retrieveStaff(uuid);
     }
     @PatchMapping(RETRIEVE_OR_UPDATE)
+    @ApiOperation(value="Endpoint for updating staff profile")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = CODE_200, message = SUCCESS),
+            @io.swagger.annotations.ApiResponse(code = CODE_404, message = "The resource you were trying to reach is not found"),
+            @io.swagger.annotations.ApiResponse(code = CODE_500, message = "An error occur kindly contact support"),
+            @io.swagger.annotations.ApiResponse(code = CODE_417, message = "Expectation failed"),
+            @io.swagger.annotations.ApiResponse(code = CODE_400, message = "Request not supported or Method type not valid")})
     ApiResponse<String> updateStaff(@Valid @RequestBody StaffRequest payload, @PathVariable(UUID)UUID uuid){
         return staffService.updateStaff(payload, uuid);
 

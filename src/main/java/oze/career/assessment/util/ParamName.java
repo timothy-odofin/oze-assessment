@@ -14,5 +14,8 @@ public class ParamName {
     public final static String CREATE="created";
     public final static String DELETED="deleted";
     public final static String STAFF_ID="staffId";
+    public final static String FILE="file";
+    public final static String DATE_FROM="dateFrom";
+    public final static String DATE_TO="dateTo";
 
 }
