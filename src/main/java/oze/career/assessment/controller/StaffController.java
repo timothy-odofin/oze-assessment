@@ -36,7 +36,6 @@ public class StaffController {
     ApiResponse<String> addStaff(@Valid @RequestBody StaffRequest payload) {
         return staffService.addStaff(payload);
     }
-
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = SUCCESS),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "An error occur kindly contact support"),

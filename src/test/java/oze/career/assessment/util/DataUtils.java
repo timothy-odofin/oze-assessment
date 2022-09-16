@@ -4,8 +4,9 @@ import org.springframework.http.HttpStatus;
 import oze.career.assessment.model.dto.request.StaffRequest;
 import oze.career.assessment.model.dto.response.ApiResponse;
 
-import static oze.career.assessment.util.MessageUtil.STAFF_UPDATED;
-import static oze.career.assessment.util.MessageUtil.SUCCESS;
+import java.util.List;
+
+import static oze.career.assessment.util.MessageUtil.*;
 import static oze.career.assessment.util.ParamName.CREATE;
 
 public class DataUtils {
@@ -15,9 +16,13 @@ public class DataUtils {
                 .data(String.format(STAFF_UPDATED,CREATE))
                 .message(SUCCESS)
                 .build();
+    }
+    public static String getAddStaffBadRequestData(){
+        return String.format(",",List.of(INVALID_FIRSTNAME, INVALID_LASTNAME));
 
     }
-    public static StaffRequest getAddStaffPayload(){
+
+    public static StaffRequest getAddStaffValidPayload(){
         return StaffRequest.builder()
                 .firstName("Oyejide")
                 .lastName("Odofin")

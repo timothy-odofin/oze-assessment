@@ -49,7 +49,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
-        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST.value(), errors));
+        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST.value(), String.join(",",errors)));
     }
 
     @ExceptionHandler(UnknownHostException.class)
