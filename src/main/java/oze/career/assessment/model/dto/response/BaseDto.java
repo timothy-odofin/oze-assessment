@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 public class BaseDto {
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    private LocalDateTime registrationDate;
+    private LocalDateTime dateCreated;
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime lastModified;
 

@@ -12,12 +12,14 @@ spring:
     name: medical_record
   jmx:
     default-domain: medical_record
+  sql.init.mode: always
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/medical_store?allowPublicKeyRetrieval=true&useUnicode=true
     username: root
     password: test
   jpa:
+    defer-datasource-initialization: true
     properties:
       hibernate:
         jdbc:

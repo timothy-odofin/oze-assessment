@@ -99,6 +99,7 @@ public class PatientServiceImpl implements PatientService {
                 .build();
         return ApiResponse.<PatientResponseData>builder()
                 .message(SUCCESS)
+                .code(HttpStatus.OK)
                 .data(data)
                 .build();
     }
@@ -115,12 +116,12 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ApiResponse<String> deletePatient(UUID staffId, String dateFrom, String dateTo) {
         staffService.validateStaff(staffId);
-        Optional<Date> fromDate = AppUtil.validateDate(dateFrom);
-        Optional<Date> toDate = AppUtil.validateDate(dateTo);
+        Optional<LocalDate> fromDate = AppUtil.validateLocalDate(dateFrom);
+        Optional<LocalDate> toDate = AppUtil.validateLocalDate(dateTo);
         if (fromDate.isEmpty() || toDate.isEmpty())
             throw new BadRequestException(INVALID_DATE_FILTER);
-        Date fDate = fromDate.get();
-        Date tDate = toDate.get();
+        LocalDate fDate = fromDate.get();
+        LocalDate tDate = toDate.get();
         if (patientRepository.checkPatientExistence(fDate, tDate, PageRequest.of(0, 1)).isEmpty())
             throw new RecordNotFoundException(PATIENT_NOT_FOUND);
         patientRepository.deletePatient(fDate, tDate);
@@ -199,6 +200,12 @@ public class PatientServiceImpl implements PatientService {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+            //Create csv header
+            csvPrinter.printRecord(Arrays.asList(
+                    PatientCsvHeader.NAME,
+                    PatientCsvHeader.AGE,
+                    PatientCsvHeader.LAST_VISIT_DATE,
+                    PatientCsvHeader.DATE_CREATED));
             for (Patient result : patients) {
                 csvPrinter.printRecord(Arrays.asList(
                         result.getName(),

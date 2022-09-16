@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import oze.career.assessment.model.entity.Patient;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 public interface PatientRepository extends JpaRepository<Patient,Long> {
@@ -18,8 +19,8 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Modifying
     @Transactional
     @Query(value="delete from Patient patient where (patient.lastVisitDate between :dateFrom and :dateTo) or (patient.lastVisitDate=:dateFrom or patient.lastVisitDate=:dateTo)")
-    void deletePatient(@Param("dateFrom") Date dateFrom, @Param("dateTo")Date dateTo);
+    void deletePatient(@Param("dateFrom") LocalDate dateFrom, @Param("dateTo")LocalDate dateTo);
 
     @Query(value="select patient from Patient patient where (patient.lastVisitDate between :dateFrom and :dateTo) or (patient.lastVisitDate=:dateFrom or patient.lastVisitDate=:dateTo)")
-    Page<Patient> checkPatientExistence(@Param("dateFrom") Date dateFrom, @Param("dateTo")Date dateTo, Pageable pageable);
+    Page<Patient> checkPatientExistence(@Param("dateFrom") LocalDate dateFrom, @Param("dateTo")LocalDate dateTo, Pageable pageable);
 }

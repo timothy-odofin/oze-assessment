@@ -5,11 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import oze.career.assessment.model.dto.request.PatientRequest;
 import oze.career.assessment.model.dto.response.ApiResponse;
-import oze.career.assessment.model.dto.response.PatientResponse;
 import oze.career.assessment.model.dto.response.PatientResponseData;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 public interface PatientService {

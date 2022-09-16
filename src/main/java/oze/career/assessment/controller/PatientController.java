@@ -12,6 +12,8 @@ import oze.career.assessment.model.dto.request.PatientRequest;
 import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.PatientResponseData;
 import oze.career.assessment.service.PatientService;
+import oze.career.assessment.validation.ValidUUID;
+
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
@@ -66,6 +68,7 @@ public class PatientController {
             @ApiParam(value=MIN_AGE_MEANING, required = true, allowEmptyValue = false, defaultValue = MIN_AGE_DEFAULT)
             @RequestParam(MIN_AGE) Integer minAge,
             @ApiParam(value=STAFF_ID_MEANING, required = true, allowEmptyValue = false)
+            @ValidUUID
             @RequestParam(STAFF_ID) UUID staffId,
             @ApiParam(value=PAGE_MEANING, required = true, allowEmptyValue = false, defaultValue = PAGE_DEFAULT)
             @RequestParam(value = PAGE, defaultValue = PAGE_DEFAULT) int page,
