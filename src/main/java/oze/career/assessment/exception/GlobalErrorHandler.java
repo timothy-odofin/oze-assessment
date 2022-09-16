@@ -34,7 +34,7 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ApiResponse> handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        return ResponseEntity.ok(new ApiResponse<>(FAILED,EXPECTATION_FAILED,FILE_TOO_LARGE));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED,EXPECTATION_FAILED.value(),FILE_TOO_LARGE));
     }
     @Override
     protected ResponseEntity handleMethodArgumentNotValid(
@@ -49,14 +49,14 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
-        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST, errors));
+        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST.value(), errors));
     }
 
     @ExceptionHandler(UnknownHostException.class)
     public ResponseEntity handleUnknownHostException(UnknownHostException exception, WebRequest webRequest) {
         String requestUrl = webRequest.getContextPath();
         log.warn("Unknown host for {} access through endpoint {}", exception.getMessage(),requestUrl);
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND, SERVER_ERROR));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND.value(), SERVER_ERROR));
     }
 
 
@@ -64,21 +64,21 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity handleRecordNotFoundExceptions(RecordNotFoundException exception, WebRequest webRequest) {
         String requestUrl = webRequest.getContextPath();
         log.warn("Record not found for {} access through endpoint {} ", exception.getMessage(),requestUrl);
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND, exception.getMessage()));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND.value(), exception.getMessage()));
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity handleBadRequestExceptions(BadRequestException exception, WebRequest webRequest) {
         String requestUrl = webRequest.getContextPath();
         log.warn("Bad request exception {} access through endpoint {}", exception.getMessage(),requestUrl);
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST, exception.getMessage()));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST.value(), exception.getMessage()));
 
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity illegalException(RecordNotFoundException exception, WebRequest webRequest) {
         String requestUrl = webRequest.getContextPath();
         log.warn("Record not found for {} access through {}", exception.getMessage(),requestUrl);
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND, exception.getMessage()));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, NOT_FOUND.value(), exception.getMessage()));
 
     }
 
@@ -88,28 +88,28 @@ public class GlobalErrorHandler extends ResponseEntityExceptionHandler {
         String error =
                 ex.getName() + " should be of type " + ex.getRequiredType().getName();
 
-        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST, error)
+        return  ResponseEntity.ok(new ApiResponse<>(FAILED, BAD_REQUEST.value(), error)
         );
     }
     @ExceptionHandler(value = ReadingCsvException.class)
     public ResponseEntity handleReadingCsvException(ReadingCsvException exception) {
         exception.printStackTrace();
         log.warn("An error occur  {}", exception.fillInStackTrace().getMessage());
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR, exception.getMessage()));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
     }
 
     @ExceptionHandler(value = IOException.class)
     public ResponseEntity handleIOException(IOException exception) {
         exception.printStackTrace();
         log.warn("An error occur  {}", exception.fillInStackTrace().getMessage());
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR, exception.getMessage()));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR.value(), exception.getMessage()));
     }
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity handlerGlobalError(Exception exception) {
         exception.printStackTrace();
         log.warn("An error occur  {}", exception.fillInStackTrace().getMessage());
-        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR, SERVER_ERROR));
+        return ResponseEntity.ok(new ApiResponse<>(FAILED, INTERNAL_SERVER_ERROR.value(), SERVER_ERROR));
     }
 
 

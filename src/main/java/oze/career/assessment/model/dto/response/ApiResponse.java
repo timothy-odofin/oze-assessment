@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public class ApiResponse<T> {
     private String message;
-    private HttpStatus code;
+    private Integer code;
     private T data;
 
     public ApiResponse(String message, T data) {
@@ -24,7 +24,7 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
-    public ApiResponse(String message, HttpStatus code, T data) {
+    public ApiResponse(String message, Integer code, T data) {
         this.message = message;
         this.data = data;
         this.code= code;

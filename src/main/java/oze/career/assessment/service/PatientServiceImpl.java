@@ -51,7 +51,7 @@ public class PatientServiceImpl implements PatientService {
         patient.setCreatedBy(staff);
         patientRepository.save(patient);
         return ApiResponse.<String>builder()
-                .code(HttpStatus.CREATED)
+                .code(HttpStatus.CREATED.value())
                 .data(String.format(PATIENT_MESSAGE, CREATE))
                 .message(SUCCESS)
                 .build();
@@ -65,12 +65,12 @@ public class PatientServiceImpl implements PatientService {
         List<PatientUploadResult> resultList = csvToPatient(file.getInputStream(),staff);
         if(resultList.isEmpty())
             return ApiResponse.<String>builder()
-                    .code(HttpStatus.CREATED)
+                    .code(HttpStatus.CREATED.value())
                     .data(String.format(PATIENT_MESSAGE, CREATE))
                     .message(SUCCESS)
                     .build();
         return ApiResponse.<List<PatientUploadResult>>builder()
-                .code(HttpStatus.CREATED)
+                .code(HttpStatus.CREATED.value())
                 .data(resultList)
                 .message(SUCCESS)
                 .build();
@@ -99,7 +99,7 @@ public class PatientServiceImpl implements PatientService {
                 .build();
         return ApiResponse.<PatientResponseData>builder()
                 .message(SUCCESS)
-                .code(HttpStatus.OK)
+                .code(HttpStatus.OK.value())
                 .data(data)
                 .build();
     }
@@ -126,7 +126,7 @@ public class PatientServiceImpl implements PatientService {
             throw new RecordNotFoundException(PATIENT_NOT_FOUND);
         patientRepository.deletePatient(fDate, tDate);
         return ApiResponse.<String>builder()
-                .code(HttpStatus.NO_CONTENT)
+                .code(HttpStatus.NO_CONTENT.value())
                 .data(String.format(PATIENT_MESSAGE, DELETED))
                 .message(SUCCESS)
                 .build();
@@ -193,9 +193,7 @@ public class PatientServiceImpl implements PatientService {
            ioException.printStackTrace();
         }
         return dataList;
-
     }
-
     private ByteArrayInputStream patientToCSV(List<Patient> patients) {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
         try (ByteArrayOutputStream out = new ByteArrayOutputStream();

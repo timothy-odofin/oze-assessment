@@ -35,7 +35,7 @@ private final StaffRepository staffRepository;
         staffRepository.save(Mapper.convertObject(payload, Staff.class));
         log.info("Data {}", payload);
         return ApiResponse.<String>builder()
-                .code(HttpStatus.CREATED)
+                .code(HttpStatus.CREATED.value())
                 .data(String.format(STAFF_UPDATED,CREATE))
                 .message(SUCCESS)
                 .build();
@@ -55,7 +55,7 @@ private final StaffRepository staffRepository;
 
         return ApiResponse.<String>builder()
                 .message(SUCCESS)
-                .code(HttpStatus.OK)
+                .code(HttpStatus.OK.value())
                 .data(DELETE_SUCCESSFUL)
                 .build();
     }
@@ -68,7 +68,7 @@ private final StaffRepository staffRepository;
         staffRepository.save(staff);
         return ApiResponse.<String>builder()
                 .data(String.format(STAFF_UPDATED,UPDATED))
-                .code(HttpStatus.OK)
+                .code(HttpStatus.OK.value())
                 .message(SUCCESS)
                 .build();
     }
@@ -76,7 +76,7 @@ private final StaffRepository staffRepository;
     @Override
     public ApiResponse<StaffResponse> retrieveStaff(UUID uuid) {
         return ApiResponse.<StaffResponse>builder()
-                .code(HttpStatus.OK)
+                .code(HttpStatus.OK.value())
                 .data(Mapper.convertObject(validateStaff(uuid),StaffResponse.class))
                 .message(SUCCESS)
                 .build();
@@ -90,7 +90,7 @@ private final StaffRepository staffRepository;
         return ApiResponse.<List<StaffResponse>>builder()
                 .message(SUCCESS)
                 .data(Mapper.convertList(staffList,StaffResponse.class))
-                .code(HttpStatus.OK)
+                .code(HttpStatus.OK.value())
                 .build();
     }
 
@@ -101,7 +101,7 @@ private final StaffRepository staffRepository;
         staffRepository.save(staff);
         return ApiResponse.<String>builder()
                 .data(String.format(STAFF_UPDATED,UPDATED))
-                .code(HttpStatus.OK)
+                .code(HttpStatus.OK.value())
                 .message(SUCCESS)
                 .build();
     }

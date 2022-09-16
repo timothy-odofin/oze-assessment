@@ -1,0 +1,32 @@
+logging:
+  level:
+    org:
+      org:
+        springframework: DEBUG
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  application:
+    name: medical_record
+  jmx:
+    default-domain: medical_record
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/medical_store_test?allowPublicKeyRetrieval=true&useUnicode=true
+    username: root
+    password: test
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC+1
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
+server:
+  port: 7000
+  servlet:
+    contextPath: /medical/record
+

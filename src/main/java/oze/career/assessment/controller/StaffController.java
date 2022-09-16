@@ -1,6 +1,5 @@
 package oze.career.assessment.controller;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import static oze.career.assessment.util.AppCode.*;
 import static oze.career.assessment.util.MessageUtil.SUCCESS;
 import static oze.career.assessment.util.ParamName.*;
 import static oze.career.assessment.util.StaffEndpoint.*;
@@ -28,12 +26,12 @@ import static oze.career.assessment.util.StaffEndpoint.*;
 public class StaffController {
     private final StaffService staffService;
 
-    @PostMapping()
+    @PostMapping(ADD_MEMBER)
     @ApiOperation(value = "Endpoint for adding new staff into the system, only validated payload would be saved", response = String.class)
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = SUCCESS),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "An error occur kindly contact support"),
-            @io.swagger.annotations.ApiResponse(code = 417, message = "Expectation failed"),
+            @io.swagger.annotations.ApiResponse(code = 201, message = "New record created succesfully"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "Request not supported or Method type not valid")})
     ApiResponse<String> addStaff(@Valid @RequestBody StaffRequest payload) {
         return staffService.addStaff(payload);
@@ -43,7 +41,7 @@ public class StaffController {
             @io.swagger.annotations.ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
             @io.swagger.annotations.ApiResponse(code = 500, message = "An error occur kindly contact support"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "Request not supported or Method type not valid")})
-    @GetMapping()
+    @GetMapping(FETCH_MEMBER)
     @ApiOperation(value = "Endpoint for retrieving paginated list of staff profile", response = StaffResponse.class, responseContainer = "List")
     ApiResponse<List<StaffResponse>> listStaff(
             @ApiParam(value = PAGE_MEANING, required = true, allowEmptyValue = false)
@@ -52,7 +50,6 @@ public class StaffController {
             @RequestParam(value = SIZE, defaultValue = SIZE_DEFAULT) int size) {
         return staffService.listStaff(page, size);
     }
-
     @GetMapping(RETRIEVE_OR_UPDATE)
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = SUCCESS),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The resource you were trying to reach is not found"),
@@ -64,7 +61,6 @@ public class StaffController {
             @PathVariable(UUID) UUID uuid) {
         return staffService.retrieveStaff(uuid);
     }
-
     @PatchMapping(UPDATE_PROFILE)
     @ApiOperation(value = "Endpoint for updating staff profile")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = SUCCESS),
