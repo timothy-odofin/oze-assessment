@@ -28,7 +28,7 @@ spring:
     hibernate:
       ddl-auto: update
 server:
-  port: 7000
+  port: 9898
   servlet:
     contextPath: /medical/record
 
