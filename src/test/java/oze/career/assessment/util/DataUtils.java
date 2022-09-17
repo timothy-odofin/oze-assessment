@@ -6,6 +6,8 @@ import oze.career.assessment.model.dto.response.ApiResponse;
 import oze.career.assessment.model.dto.response.PatientResponse;
 import oze.career.assessment.model.dto.response.PatientResponseData;
 import oze.career.assessment.model.dto.response.StaffHelper;
+import oze.career.assessment.model.entity.Patient;
+import oze.career.assessment.model.entity.Staff;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,17 +24,62 @@ public class DataUtils {
                 .build();
     }
     public static String getAddStaffBadRequestData(){
-        return String.format(",",List.of(INVALID_FIRSTNAME, INVALID_LASTNAME));
+        return String.format(",",List.of("firstName" + ": " + INVALID_FIRSTNAME,"lastName" + ": " +  INVALID_LASTNAME));
 
     }
 
     public static StaffRequest getAddStaffValidPayload(){
         return StaffRequest.builder()
-                .firstName("Oyejide")
-                .lastName("Odofin")
-                .middleName("Timothy")
+                .firstName("Olakunle")
+                .lastName("Balogun")
+                .middleName("")
+                .build();
+    }
+    public static Staff getStaffData(){
+        return Staff.builder()
+                .firstName("Olakunle")
+                .lastName("Balogun")
+                .middleName("Sango")
                 .build();
 
+    }
+
+    public static List<Patient> getPatientList(Staff createdBy){
+     return  List.of(
+              Patient.builder()
+                      .middleName("Alingo")
+                      .lastVisitDate(LocalDate.now().minusYears(2))
+                      .lastName("Bulus")
+                      .firstName("Mark")
+                      .createdBy(createdBy)
+                      .age(1)
+                      .build(),
+               Patient.builder()
+                       .middleName("Alonso")
+                       .lastVisitDate(LocalDate.now().minusYears(2))
+                       .lastName("Xavi")
+                       .firstName("")
+                       .createdBy(createdBy)
+                       .age(40)
+                       .build(),
+               Patient.builder()
+                       .middleName("Gabriel")
+                       .lastVisitDate(LocalDate.now().minusYears(2))
+                       .lastName("Jesus")
+                       .firstName("")
+                       .createdBy(createdBy)
+                       .age(35)
+                       .build(),
+               Patient.builder()
+                       .middleName("Jide")
+                       .lastVisitDate(LocalDate.now().minusYears(2))
+                       .lastName("Oloye")
+                       .firstName("Julius")
+                       .createdBy(createdBy)
+                       .age(90)
+                       .build()
+
+       );
     }
     public static String testUUID(){
         return "e1608833-30c2-43fc-b0f7-5016c7344a12";
