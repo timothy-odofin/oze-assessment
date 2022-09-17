@@ -115,4 +115,14 @@ List<Patient> initPatient(Staff staff){
         assertEquals(result.getMessage(), FAILED);
         assertEquals(result.getData(),INVALID_STAFF_UUID);
     }
+
+    @Test
+    void test_fetch_patient_return_bad_request() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get(PatientEndpoint.BASE + FETCH+"?minAge=2&staffId=45633")
+        ).andExpect(status().isOk()).andReturn();
+        String content = mvcResult.getResponse().getContentAsString();
+        ApiResponse<String> result = objectMapper.readValue(content, ApiResponse.class);
+        assertEquals(result.getCode(), BAD_REQUEST.value());
+        assertEquals(result.getMessage(), FAILED);
+    }
 }

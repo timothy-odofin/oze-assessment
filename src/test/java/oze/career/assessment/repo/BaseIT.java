@@ -19,9 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public abstract class BaseIT {
     @Autowired
     public MockMvc mockMvc;
-
     static final MySQLContainer MY_SQL_CONTAINER;
-
     static{
         MY_SQL_CONTAINER = new MySQLContainer("mysql:8");
         MY_SQL_CONTAINER.withInitScript("test.sql");

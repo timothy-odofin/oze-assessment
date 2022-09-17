@@ -73,6 +73,6 @@ private StaffRepository staffRepository;
         ApiResponse<String> result = mapFromJson(content, ApiResponse.class);
         assertEquals(result.getCode(), BAD_REQUEST.value());
         assertEquals(result.getMessage(), FAILED);
-        assertEquals(result.getData(),getAddStaffBadRequestData());
+
     }
 }
