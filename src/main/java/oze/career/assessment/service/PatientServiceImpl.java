@@ -152,13 +152,13 @@ public class PatientServiceImpl implements PatientService {
         Optional<LocalDate> lastVisitDateOptional = AppUtil.validateLocalDate(lastVisitDate);
         if(ageOptional.isEmpty())
             errorList.add("Invalid age");
-        if(AppUtil.isValidString(firstName))
+        if(!AppUtil.isValidString(firstName))
             errorList.add("Invalid first name");
-        if(AppUtil.isValidString(lastName))
+        if(!AppUtil.isValidString(lastName))
             errorList.add("Invalid last name");
         if(lastVisitDateOptional.isEmpty())
             errorList.add("Invalid last visit date");
-        if(errorList.isEmpty())
+        if(!errorList.isEmpty())
             return Optional.of(PatientUploadResult.builder()
                             .firstName(firstName)
                             .lastName(lastName)
