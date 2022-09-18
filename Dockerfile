@@ -1,6 +1,6 @@
 FROM adoptopenjdk/openjdk11:x86_64-alpine-jdk-11.0.14.1_1-slim as stage1
 
-RUN addgroup --system retailstore && adduser -S -s /bin/false -G retailstore retailstore
+RUN addgroup --system assessment && adduser -S -s /bin/false -G assessment assessment
 
 
 VOLUME /tmp
@@ -8,7 +8,7 @@ ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 RUN mkdir -p /app/dependency
 WORKDIR /app/dependency
-RUN chown -R retailstore:retailstore /app/dependency
+RUN chown -R assessment:assessment /app/dependency
 USER assessment
 RUN jar -xf ../../app.jar
 
