@@ -31,12 +31,15 @@ public class StaffServiceImpl  implements StaffService{
 
 private final StaffRepository staffRepository;
     @Override
-    public ApiResponse<String> addStaff(StaffRequest payload) {
-        staffRepository.save(Mapper.convertObject(payload, Staff.class));
+    public ApiResponse<StaffResponse> addStaff(StaffRequest payload) {
+       Staff staff = staffRepository.save(Mapper.convertObject(payload, Staff.class));
         log.info("Data {}", payload);
-        return ApiResponse.<String>builder()
+        staff.setName(staff.getFirstName()
+                .concat(" ").concat(staff.getLastName()));
+        staff.setRegistrationDate(staff.getDateCreated());
+        return ApiResponse.<StaffResponse>builder()
                 .code(HttpStatus.CREATED.value())
-                .data(String.format(STAFF_UPDATED,CREATE))
+                .data(Mapper.convertObject(staff,StaffResponse.class))
                 .message(SUCCESS)
                 .build();
     }

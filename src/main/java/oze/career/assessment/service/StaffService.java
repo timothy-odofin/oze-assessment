@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StaffService {
-    ApiResponse<String> addStaff(StaffRequest payload);
+    ApiResponse<StaffResponse> addStaff(StaffRequest payload);
     Staff validateStaff(UUID uuid);
     ApiResponse<String> deleteStaff(UUID uuid);
     ApiResponse<String> updateStaff(StaffRequest payload, UUID uuid);

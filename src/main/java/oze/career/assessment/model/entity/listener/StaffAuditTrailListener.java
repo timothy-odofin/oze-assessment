@@ -14,14 +14,17 @@ public class StaffAuditTrailListener {
 
     @PrePersist
     private void beforeCreate(Staff staff) {
-staff.setUuid(UUID.randomUUID());
+        if (staff.getUuid() == null)
+            staff.setUuid(UUID.randomUUID());
         log.info("[USER AUDIT] About to add a user {}", staff);
     }
+
     @PostPersist
     private void afterCreate(Staff staff) {
         log.info("[USER AUDIT] new user added {}", staff);
     }
-  @PostUpdate
+
+    @PostUpdate
     private void afterAnyUpdate(Staff staff) {
         log.info("[USER AUDIT] update complete for user: " + staff.getId());
     }
@@ -29,9 +32,9 @@ staff.setUuid(UUID.randomUUID());
 
     @PostLoad
     private void afterLoad(Staff staff) {
-       staff.setName(staff.getFirstName().concat(" ")
-               .concat(AppUtil.evaluate(staff.getMiddleName()))
-               .concat(" ").concat(staff.getLastName()));
-       staff.setRegistrationDate(staff.getDateCreated());
+        staff.setName(staff.getFirstName().concat(" ")
+                .concat(AppUtil.evaluate(staff.getMiddleName()))
+                .concat(" ").concat(staff.getLastName()));
+        staff.setRegistrationDate(staff.getDateCreated());
     }
 }

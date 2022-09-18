@@ -33,7 +33,7 @@ public class StaffController {
             @io.swagger.annotations.ApiResponse(code = 500, message = "An error occur kindly contact support"),
             @io.swagger.annotations.ApiResponse(code = 201, message = "New record created succesfully"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "Request not supported or Method type not valid")})
-    ApiResponse<String> addStaff(@Valid @RequestBody StaffRequest payload) {
+    ApiResponse<StaffResponse> addStaff(@Valid @RequestBody StaffRequest payload) {
         return staffService.addStaff(payload);
     }
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = SUCCESS),

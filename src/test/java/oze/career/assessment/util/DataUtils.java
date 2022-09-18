@@ -2,10 +2,7 @@ package oze.career.assessment.util;
 
 import org.springframework.http.HttpStatus;
 import oze.career.assessment.model.dto.request.StaffRequest;
-import oze.career.assessment.model.dto.response.ApiResponse;
-import oze.career.assessment.model.dto.response.PatientResponse;
-import oze.career.assessment.model.dto.response.PatientResponseData;
-import oze.career.assessment.model.dto.response.StaffHelper;
+import oze.career.assessment.model.dto.response.*;
 import oze.career.assessment.model.entity.Patient;
 import oze.career.assessment.model.entity.Staff;
 
@@ -13,13 +10,20 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static oze.career.assessment.util.MessageUtil.*;
-import static oze.career.assessment.util.ParamName.CREATE;
 
 public class DataUtils {
-    public static ApiResponse<String> getAddStaffSuccessData(){
-        return ApiResponse.<String>builder()
+    public static StaffResponse getStaffResponse(){
+        return StaffResponse.builder()
+                .name("Odofin Oyejide")
+                .uuid("Test")
+                .photoImage("NA")
+                .build();
+
+    }
+    public static ApiResponse<StaffResponse> getAddStaffSuccessData(){
+        return ApiResponse.<StaffResponse>builder()
                 .code(HttpStatus.CREATED.value())
-                .data(String.format(STAFF_UPDATED,CREATE))
+                .data(getStaffResponse())
                 .message(SUCCESS)
                 .build();
     }
