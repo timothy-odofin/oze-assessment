@@ -70,9 +70,9 @@ public class PatientServiceImpl implements PatientService {
                     .message(SUCCESS)
                     .build();
         return ApiResponse.<List<PatientUploadResult>>builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.FAILED_DEPENDENCY.value())
                 .data(resultList)
-                .message(SUCCESS)
+                .message(FAILED)
                 .build();
     }
 
@@ -144,7 +144,7 @@ public class PatientServiceImpl implements PatientService {
     private Optional<PatientUploadResult> validateAndSave(CSVRecord record, Staff postedBy){
         String age = record.get(PatientCsvHeader.AGE);
         String firstName = record.get(PatientCsvHeader.FIRST_NAME);
-      String lastName =record.get(PatientCsvHeader.LAST_NAME);
+       String lastName =record.get(PatientCsvHeader.LAST_NAME);
         String middleName = record.get(PatientCsvHeader.MIDDLE_NAME);
         String lastVisitDate =record.get(PatientCsvHeader.LAST_VISIT_DATE);
         List<String> errorList = new ArrayList<>();
@@ -184,7 +184,6 @@ public class PatientServiceImpl implements PatientService {
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-
             for (CSVRecord csvRecord : csvRecords) {
                 Optional<PatientUploadResult> result = validateAndSave(csvRecord, postedBy);
                 result.ifPresent(dataList::add);
