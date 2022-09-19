@@ -44,6 +44,7 @@ To run the project on the host machine, the following information will be requir
 * It runs on the default port: 9898,
 * The context-path is: "/medical/record"
 * Access the application using _http://localhost:9898/medical/record/swagger-ui.html_
+* Published postman Collection _https://documenter.getpostman.com/view/8525595/2s7Yn1d23Y#53cc8cf7-7c4d-4343-965e-b57c5bcb7234_
 #### To run and deploy the application using the test script
 **On Windows**
 Open the run.bat file in edit mode, change the variable DEVELOPMENT_HOME to point to the location of the project.
